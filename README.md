@@ -6,3 +6,4 @@ Codes for both methods of using the package and using the `requests` package sho
 Comparison should be done between the two, to understand the package better.
 
 Additional source code of using the `Handlers` methods are also included along with a threaded version of it.
+@Min Zhe
