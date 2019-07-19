@@ -7,6 +7,8 @@ function in the background.
 
 Please note that this only works for raw text and will throw an error
 if other things such as stickers are posted.
+
+// edit - 19/9/19, made changes by using sessions to enable persistent connection
 '''
 
 import requests
@@ -14,6 +16,7 @@ import threading
 
 TOKEN = ""
 print("Running in background...")
+s = requests.Session()
 '''
 We use the same updategetter function with some minor changes to catch
 catch null responses when there are no pending updates.
@@ -21,7 +24,7 @@ catch null responses when there are no pending updates.
 def updategetter(token = TOKEN):
 	
 	get_updates = "https://api.telegram.org/bot{}/getUpdates".format(token)
-	response = requests.get(get_updates)
+	response = s.get(get_updates)
 	try:
 		response = response.json()['result']
 		latest_msg = (response[0]['message']['text'])
@@ -41,9 +44,9 @@ def messagesender(token = TOKEN, msg = "you message text"):
 	while True:
 		latest_msg, latest_id, latest_user, update_id = updategetter(token)
 		send_text = "https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}".format(token, latest_id, msg)
-		response = requests.get(send_text)
+		response = s.get(send_text)
 		offset = "https://api.telegram.org/bot{}/getUpdates?offset={}".format(token, update_id+1)
-		response = requests.get(offset)
+		response = s.get(offset)
 '''
 We then start the thread with the input arguments.
 
