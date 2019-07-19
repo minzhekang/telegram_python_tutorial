@@ -19,18 +19,19 @@ We use the same updategetter function with some minor changes to catch
 catch null responses when there are no pending updates.
 '''
 def updategetter(token = TOKEN):
+	
 	get_updates = "https://api.telegram.org/bot{}/getUpdates".format(token)
 	response = requests.get(get_updates)
-	response = response.json()['result']
-
-	if response == []:
-		return None, None, None, 0
-	else:
+	try:
+		response = response.json()['result']
 		latest_msg = (response[0]['message']['text'])
 		latest_id = (response[0]['message']['chat']['id'])
 		latest_user = (response[0]['message']['from']['username'])
 		update_id = (response[0]['update_id'])
 		return latest_msg, latest_id, latest_user , update_id
+	except:
+		print("Caution! array is empty, doing nothing...")
+		return None, None, None ,0
 
 '''
 This is our main function that connects to the telegram API which
